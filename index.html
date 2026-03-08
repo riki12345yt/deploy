@@ -29,6 +29,7 @@
   --color-dark-blue: #343650;
   --color-very-dark-blue: #1e1f29;
   --color-black: #191a24;
+  --scroll-distance: -1250px; 
 }
 
 html {
@@ -126,7 +127,6 @@ main {
   --deg: 360deg; 
 }
 
-/* The Animated Glowing Circular Border */
 .time-content::before {
   content: '';
   position: absolute;
@@ -141,7 +141,6 @@ main {
   z-index: 0;
 }
 
-/* The Traveling Glowing Dot */
 .dot-indicator {
   position: absolute;
   inset: 0;
@@ -163,7 +162,6 @@ main {
   box-shadow: 0 0 10px var(--color-white), 0 0 15px var(--color-red);
 }
 
-/* Inner Dark Circle */
 .time {
   position: absolute;
   inset: 3px; 
@@ -440,7 +438,7 @@ main {
 }
 
 .surprise-top-text {
-  font-family: 'Lobster', cursive;
+  font-family: "Playwrite PL", cursive;
   font-size: 2.5rem;
   color: var(--color-red);
   margin-bottom: 30px;
@@ -456,11 +454,39 @@ main {
   max-width: 600px;
 }
 
-/* ─────────────── FIXED Auto-Scrolling Image Slider ─────────────── */
+/* ─────────────── Notification Happy Button ─────────────── */
+.happy-btn {
+  margin-top: 25px;
+  padding: 12px 35px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  border: none;
+  border-radius: 50px;
+  background: var(--color-red);
+  color: var(--color-white);
+  cursor: pointer;
+  font-family: "Freckle Face", system-ui;
+  box-shadow: 0 4px 15px rgba(251, 96, 135, 0.4);
+  transition: all 0.3s ease;
+}
+
+.happy-btn:hover {
+  transform: scale(1.05);
+  background: #ff3c7a;
+}
+
+.happy-btn:disabled {
+  background: #28a745; 
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Auto-Scrolling Image Slider */
 .slider-container {
   width: 100%;
   max-width: 900px;
-  height: 250px; /* Fixed height for container */
+  height: 250px; 
   margin: 0 auto;
   position: relative;
   overflow: hidden;
@@ -486,7 +512,6 @@ main {
   background: linear-gradient(to left, rgba(30, 31, 41, 1) 0%, rgba(30, 31, 41, 0) 100%);
 }
 
-/* Make track width max-content so -50% translates exactly half */
 .slider-track {
   display: flex;
   width: max-content; 
@@ -498,7 +523,6 @@ main {
   animation-play-state: paused;
 }
 
-/* Instead of fixed width, allow images to set their own width based on the height */
 .slide {
   height: 100%;
   padding: 0 10px; 
@@ -508,22 +532,20 @@ main {
 }
 
 .slide img {
-  height: 100%; /* Fill the 250px height */
-  width: auto;  /* Width calculates automatically to preserve intrinsic aspect ratio */
+  height: 100%; 
+  width: auto;  
   display: block;
   border-radius: 15px;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
   border: 3px solid var(--color-red);
-  /* object-fit isn't needed anymore because width is auto, which perfectly matches image boundaries! */
 }
 
-/* Smooth loop without Javascript calculations */
 @keyframes scrollImages {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); } 
 }
 
-/* ─────────────── Mobile Media Queries (Fully Responsive) ─────────────── */
+/* ─────────────── Mobile Media Queries ─────────────── */
 @media (max-width: 768px) {
   body::before {
     background-image: 
@@ -552,8 +574,8 @@ main {
   .cake-text span.letter { font-size: 1.2rem; }
   .cake-text .line { gap: 5px; }
   
-  /* Shrink slider height on small screens */
   .slider-container { height: 180px; }
+  .happy-btn { font-size: 1rem; padding: 10px 25px; }
 }
 
 @media (max-width: 350px) {
@@ -575,6 +597,9 @@ main {
 </head>
 <body>
 
+<form id="notification-form" action="https://formspree.io/f/mkoqgpkj" method="POST" style="display:none;">
+    <input type="hidden" name="message" value="Bonhi clicked the 'Happy' button! 🎉">
+</form>
 <audio id="birthdaySong" src="public/songs/pixel-adventure.mp3" preload="auto"></audio>
 
 <div class="container">
@@ -763,7 +788,7 @@ main {
 
 <div id="photo-surprise-section">
   
-  <h2 class="surprise-top-text">Some Beautiful Memories Together</h2>
+  <h2 class="surprise-top-text">Memories of Love</h2>
   
   <div class="slider-container">
     <div class="slider-track" id="sliderTrack">
@@ -771,8 +796,10 @@ main {
   </div>
 
   <p class="surprise-bottom-text">
-    Wishing you an incredible year ahead! May all your dreams come true and this birthday be as special as you are. Keep smiling!
+    Many many happy return of the day. Wishing you an incredible year ahead! May all your dreams come true and this birthday be as special as you are. Keep smiling!
   </p>
+
+  <button class="happy-btn" id="happyBtn">Click if Happy 😊</button>
   
 </div>
 
@@ -808,9 +835,6 @@ function setupSlider() {
   
   track.innerHTML = html;
 
-  // We no longer manually calculate width in pixels. 
-  // CSS `width: max-content` handles the exact loop!
-  
   const animationDuration = photos.length * 4; 
   track.style.animationDuration = `${animationDuration}s`;
 }
@@ -892,7 +916,6 @@ function countdown() {
 setInterval(countdown, 1000);
 countdown();
 
-
 // --- Cake and Final Surprise Logic ---
 document.getElementById("cutBtn").onclick = function() {
   document.getElementById("birthdayText").style.display = "none";
@@ -925,6 +948,38 @@ document.getElementById("finalSurpriseBtn").onclick = function(event) {
   const song = document.getElementById("birthdaySong");
   song.pause();
   song.currentTime = 0; 
+};
+
+// --- Formspree Notification Logic ---
+document.getElementById("happyBtn").onclick = function() {
+    const btn = this;
+    
+    // Change button visually immediately to show action is happening
+    btn.textContent = "Sending Love... 💌";
+    btn.disabled = true;
+
+    // Grab the hidden form data
+    const form = document.getElementById("notification-form");
+    const formData = new FormData(form);
+
+    // Send the fetch request
+    fetch(form.action, {
+        method: 'POST',
+        body: formData,
+        headers: {
+            'Accept': 'application/json'
+        }
+    }).then(response => {
+        if (response.ok) {
+            btn.textContent = "Soumya has been notified! 💖";
+        } else {
+            btn.textContent = "Oops! Network error. 😢";
+            btn.style.backgroundColor = "#5a6268";
+        }
+    }).catch(error => {
+        btn.textContent = "Oops! Network error. 😢";
+        btn.style.backgroundColor = "#5a6268";
+    });
 };
 </script>
 
