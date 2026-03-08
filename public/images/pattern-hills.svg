@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 1440 220">
+  <defs>
+    <path id="hills" d="M 0 56.00006 Q 120 80 240 56 t 240 0 t 240 0 t 240 0 t 240 0 t 240 0 Z"/>
+  </defs>
+  <mask id="clip">
+    <rect width="1440" height="220" fill="white"/>
+    <use xlink:href="#hills" stroke="black" stroke-width="6"/>
+  </mask>
+  <g mask="url(#clip)">
+    <rect width="1440" height="220" fill="#3c3f58"/>
+    <use xlink:href="#hills" stroke="#fb6087" stroke-width="2" fill="none"/>
+    <use xlink:href="#hills" xlink:href="#hills" stroke="#1a1e2e" stroke-width="3" fill="none" transform="translate(0, 40)"/>
+  </g>
+</svg>
