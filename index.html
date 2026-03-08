@@ -12,7 +12,9 @@
 <link href="https://fonts.googleapis.com/css2?family=Betania+Patmos+In&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Freckle+Face&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Freckle+Face&family=Pangolin&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playwrite+PL:wght@100..400&display=swap" rel="stylesheet">
 <style>
+
 /* ─────────────── Reset & Variables ─────────────── */
 * {
   margin: 0;
@@ -356,6 +358,7 @@ main {
   align-items: center;
   gap: 15px;
   margin-top: 40px; 
+  /*font-size: smaller;*/
 }
 
 .cake-text .line {
@@ -367,15 +370,17 @@ main {
 
 .cake-text .word {
   display: inline-flex;
+  /*font-size: smaller;*/
 }
 
 .cake-text span.letter {
   opacity: 0;
   display: inline-block;
   transform: translateY(-200px);
-  font-family: "Dancing Script", cursive;
-  font-size: 3.5rem;
+  font-family:"Playwrite PL", cursive;
+  text-transform: uppercase;
   color: #fff;
+  font-size: 1.5rem;
   line-height: 1;
 }
 
@@ -402,7 +407,7 @@ main {
   background: var(--color-white);
   color: var(--color-red);
   cursor: pointer;
-  font-family: 'Red Hat Text', sans-serif;
+  font-family: "Playwrite PL", cursive;
   box-shadow: 0 4px 15px rgba(255, 255, 255, 0.3);
   opacity: 0;
   visibility: hidden;
@@ -566,7 +571,7 @@ main {
 </head>
 <body>
 
-<audio id="birthdaySong" src="public/song/pixel-adventure.mp3" preload="auto"></audio>
+<audio id="birthdaySong" src="public/songs/pixel-adventure.mp3" preload="auto"></audio>
 
 <div class="container">
   <main>
@@ -814,7 +819,7 @@ function setupSlider() {
 setupSlider();
 window.addEventListener('resize', setupSlider);
 
-const launchDate = new Date('March 12 2026 00:00:00').getTime();
+const launchDate = new Date('March 12 2025 00:00:00').getTime();
 const MAX_DAYS = 365;
 
 let timerEnded = false; 
