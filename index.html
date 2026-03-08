@@ -13,8 +13,8 @@
 <link href="https://fonts.googleapis.com/css2?family=Freckle+Face&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Freckle+Face&family=Pangolin&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Playwrite+PL:wght@100..400&display=swap" rel="stylesheet">
-<style>
 
+<style>
 /* ─────────────── Reset & Variables ─────────────── */
 * {
   margin: 0;
@@ -29,12 +29,11 @@
   --color-dark-blue: #343650;
   --color-very-dark-blue: #1e1f29;
   --color-black: #191a24;
-  --scroll-distance: -1250px; 
 }
 
 html {
   color: var(--color-light-blue);
-  font-family:"Freckle Face", system-ui;
+  font-family: "Freckle Face", system-ui;
   font-size: 16px;
   font-weight: 700;
 }
@@ -217,7 +216,7 @@ main {
   display: inline-flex;
   white-space: nowrap;
   flex-wrap: nowrap;
-  font-family:  "Betania Patmos In", cursive;
+  font-family: "Betania Patmos In", cursive;
 }
 
 .birthday span {
@@ -244,7 +243,7 @@ main {
 
 /* Let's Cut the Cake Button */
 .cut-btn {
-  font-family:"Freckle Face", system-ui;
+  font-family: "Freckle Face", system-ui;
   margin-top: 30px;
   padding: 10px 25px;
   font-size: 1.1rem;
@@ -358,7 +357,6 @@ main {
   align-items: center;
   gap: 15px;
   margin-top: 40px; 
-  /*font-size: smaller;*/
 }
 
 .cake-text .line {
@@ -370,17 +368,16 @@ main {
 
 .cake-text .word {
   display: inline-flex;
-  /*font-size: smaller;*/
 }
 
 .cake-text span.letter {
   opacity: 0;
   display: inline-block;
   transform: translateY(-200px);
-  font-family:"Playwrite PL", cursive;
+  font-family: "Playwrite PL", cursive;
   text-transform: uppercase;
   color: #fff;
-  font-size: 1.5rem;
+  font-size: 2.5rem; 
   line-height: 1;
 }
 
@@ -459,11 +456,11 @@ main {
   max-width: 600px;
 }
 
-/* Auto-Scrolling Image Slider */
+/* ─────────────── FIXED Auto-Scrolling Image Slider ─────────────── */
 .slider-container {
   width: 100%;
   max-width: 900px;
-  height: 250px;
+  height: 250px; /* Fixed height for container */
   margin: 0 auto;
   position: relative;
   overflow: hidden;
@@ -489,8 +486,11 @@ main {
   background: linear-gradient(to left, rgba(30, 31, 41, 1) 0%, rgba(30, 31, 41, 0) 100%);
 }
 
+/* Make track width max-content so -50% translates exactly half */
 .slider-track {
   display: flex;
+  width: max-content; 
+  height: 100%;
   animation: scrollImages 60s linear infinite;
 }
 
@@ -498,9 +498,9 @@ main {
   animation-play-state: paused;
 }
 
+/* Instead of fixed width, allow images to set their own width based on the height */
 .slide {
-  width: 250px;
-  height: 250px;
+  height: 100%;
   padding: 0 10px; 
   display: flex;
   align-items: center;
@@ -508,18 +508,19 @@ main {
 }
 
 .slide img {
-  width: 100%;
-  height: 100%;
-  /* This ensures the image fully fills the container without extra space! */
-  object-fit: cover; 
+  height: 100%; /* Fill the 250px height */
+  width: auto;  /* Width calculates automatically to preserve intrinsic aspect ratio */
+  display: block;
   border-radius: 15px;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
   border: 3px solid var(--color-red);
+  /* object-fit isn't needed anymore because width is auto, which perfectly matches image boundaries! */
 }
 
+/* Smooth loop without Javascript calculations */
 @keyframes scrollImages {
   0% { transform: translateX(0); }
-  100% { transform: translateX(var(--scroll-distance)); }
+  100% { transform: translateX(-50%); } 
 }
 
 /* ─────────────── Mobile Media Queries (Fully Responsive) ─────────────── */
@@ -535,7 +536,7 @@ main {
   .time { font-size: 1.8rem; inset: 2.5px; }
   .dot-indicator::before { width: 8px; height: 8px; top: -3px; }
   .birthday { font-size: 2rem; }
-  .cake-text span.letter { font-size: 2.8rem; }
+  .cake-text span.letter { font-size: 2rem; }
   .surprise-top-text { font-size: 2rem; }
   .surprise-bottom-text { font-size: 1rem; }
 }
@@ -548,10 +549,11 @@ main {
   .dot-indicator::before { width: 7px; height: 7px; top: -2.5px; }
   .metric { font-size: 0.55rem; margin-top: 8px; }
   .birthday { font-size: 1.3rem; }
-  .cake-text span.letter { font-size: 2.2rem; }
+  .cake-text span.letter { font-size: 1.2rem; }
+  .cake-text .line { gap: 5px; }
   
-  .slider-container, .slide { height: 200px; }
-  .slide { width: 200px; }
+  /* Shrink slider height on small screens */
+  .slider-container { height: 180px; }
 }
 
 @media (max-width: 350px) {
@@ -560,12 +562,14 @@ main {
   .time { font-size: 1.2rem; inset: 2px; }
   .dot-indicator::before { width: 6px; height: 6px; top: -2px; }
   .metric { font-size: 0.5rem; margin-top: 6px; }
+  .cake-text span.letter { font-size: 1rem; }
 }
 
 @media (max-height: 650px) {
   #cake-wrapper { transform: scale(0.7); margin-top: -150px; margin-bottom: -50px; }
   .cake-text { margin-top: 10px; gap: 5px; }
-  .cake-text span.letter { font-size: 2.5rem; }
+  .cake-text span.letter { font-size: 1.5rem; }
+  .slider-container { height: 150px; }
 }
 </style>
 </head>
@@ -804,13 +808,8 @@ function setupSlider() {
   
   track.innerHTML = html;
 
-  const isMobile = window.innerWidth <= 480;
-  const slideWidth = isMobile ? 200 : 250;
-  
-  track.style.width = `calc(${slideWidth}px * ${photos.length * 2})`;
-  
-  const scrollDistance = slideWidth * photos.length;
-  document.documentElement.style.setProperty('--scroll-distance', `-${scrollDistance}px`);
+  // We no longer manually calculate width in pixels. 
+  // CSS `width: max-content` handles the exact loop!
   
   const animationDuration = photos.length * 4; 
   track.style.animationDuration = `${animationDuration}s`;
