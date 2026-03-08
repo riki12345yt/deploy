@@ -480,7 +480,7 @@ main {
 
 .slider-track {
   display: flex;
-  animation: scrollImages 20s linear infinite;
+  animation: scrollImages 60s linear infinite;
 }
 
 .slider-container:hover .slider-track {
@@ -499,7 +499,8 @@ main {
 .slide img {
   width: 100%;
   height: 100%;
-  object-fit: cover;
+  /* This ensures the image fully fills the container without extra space! */
+  object-fit: cover; 
   border-radius: 15px;
   box-shadow: 0 8px 15px rgba(0, 0, 0, 0.4);
   border: 3px solid var(--color-red);
@@ -763,38 +764,35 @@ main {
 <script>
 // ==========================================
 // 📸 JUST ADD YOUR PHOTO LINKS HERE! 📸
-// Paste your image URLs inside the quotes, separated by commas.
 // ==========================================
 const photos = [
-  "https://i.imgur.com/1.jpg",
-  "https://i.imgur.com/2.jpg",
-  "https://i.imgur.com/3.jpg",
-  "https://i.imgur.com/4.jpg",
-  "https://i.imgur.com/5.jpg",
-  "https://i.imgur.com/6.jpg",
-  "https://i.imgur.com/7.jpg",
-  "https://i.imgur.com/8.jpg",
-  "https://i.imgur.com/9.jpg",
-  "https://i.imgur.com/10.jpg"
+  "public/images/1.jpeg", "public/images/2.jpeg", "public/images/3.jpeg",
+  "public/images/4.jpeg", "public/images/5.jpeg", "public/images/6.jpeg",
+  "public/images/7.jpeg", "public/images/8.jpeg", "public/images/9.jpeg",
+  "public/images/10.jpeg", "public/images/11.jpeg", "public/images/12.jpeg",
+  "public/images/13.jpeg", "public/images/14.jpeg", "public/images/15.jpeg",
+  "public/images/16.jpeg", "public/images/17.jpeg", "public/images/18.jpeg",
+  "public/images/19.jpeg", "public/images/20.jpeg", "public/images/21.jpeg",
+  "public/images/22.jpeg", "public/images/23.jpeg", "public/images/24.jpeg",
+  "public/images/25.jpeg", "public/images/26.jpeg", "public/images/27.jpeg",
+  "public/images/28.jpeg", "public/images/29.jpeg", "public/images/30.jpeg",    
+  "public/images/31.jpeg", "public/images/32.jpeg", "public/images/33.jpeg",
+  "public/images/34.jpeg"
 ];
 
-// --- Automatically Builds the Photo Slider ---
 function setupSlider() {
   const track = document.getElementById("sliderTrack");
   let html = "";
   
-  // Create a slide for every photo in the list
   photos.forEach(photoSrc => {
     html += `<div class="slide"><img src="${photoSrc}" alt="Memory"></div>`;
   });
-  // Duplicate the slides exactly once to create the seamless infinite scrolling effect
   photos.forEach(photoSrc => {
     html += `<div class="slide"><img src="${photoSrc}" alt="Memory"></div>`;
   });
   
   track.innerHTML = html;
 
-  // Calculate widths for the animation
   const isMobile = window.innerWidth <= 480;
   const slideWidth = isMobile ? 200 : 250;
   
@@ -802,29 +800,25 @@ function setupSlider() {
   
   const scrollDistance = slideWidth * photos.length;
   document.documentElement.style.setProperty('--scroll-distance', `-${scrollDistance}px`);
+  
+  const animationDuration = photos.length * 4; 
+  track.style.animationDuration = `${animationDuration}s`;
 }
 
 setupSlider();
 window.addEventListener('resize', setupSlider);
 
-
-// --- Countdown Timer Logic with Border Calculation ---
 const launchDate = new Date('March 12 2026 00:00:00').getTime();
-
-// Maximum days to calculate the visual border scale for the "Days" circle
 const MAX_DAYS = 365;
 
-// Flags to ensure code runs properly and doesn't repeat
 let timerEnded = false; 
 let songStarted = false;
 
-// 🎵 FUNCTION TO PLAY THE SONG 🎵
 function playMusic() {
   if (timerEnded && !songStarted) {
     const song = document.getElementById("birthdaySong");
     song.play().then(() => {
       songStarted = true;
-      // Once it plays successfully, remove the backup event listener
       document.removeEventListener('click', playMusic);
     }).catch(error => {
       console.log("Waiting for user interaction to play the song...");
@@ -847,13 +841,11 @@ function countdown() {
     document.querySelector('.minutes').textContent = minutes;
     document.querySelector('.seconds').textContent = seconds;
 
-    // Calculate how many degrees (out of 360) each border should rotate/glow
     const daysDeg = (days / MAX_DAYS) * 360;
     const hoursDeg = (hours / 24) * 360;
     const minutesDeg = (minutes / 60) * 360;
     const secondsDeg = (seconds / 60) * 360;
 
-    // Apply the degrees to the custom CSS variable for each specific circle container
     document.getElementById('days-box').style.setProperty('--deg', `${daysDeg}deg`);
     document.getElementById('hours-box').style.setProperty('--deg', `${hoursDeg}deg`);
     document.getElementById('minutes-box').style.setProperty('--deg', `${minutesDeg}deg`);
@@ -863,10 +855,8 @@ function countdown() {
     if (!timerEnded) {
       timerEnded = true; 
       
-      // Reveal Birthday elements when countdown finishes
       document.querySelector('.countdown').style.display = 'none';
       
-      // Grabs ALL captions and hides them
       const captions = document.querySelectorAll('.caption');
       captions.forEach(caption => {
         caption.style.display = 'none';
@@ -875,17 +865,15 @@ function countdown() {
       const text = document.getElementById('birthdayText');
       text.style.display = 'flex';
       
-      // 🎵 ATTEMPT TO PLAY SONG EXACTLY WHEN ANIMATION STARTS 🎵
       setTimeout(() => { 
         text.classList.add('show'); 
-        playMusic(); // Trigger song exactly when text drops down
+        playMusic();
       }, 200);
       
       setTimeout(() => {
         document.getElementById('cutBtn').style.display = 'inline-block';
       }, 6500); 
       
-      // 🎵 FALLBACK: IF BLOCKED, PLAY IT ON THE FIRST CLICK ANYWHERE 🎵
       document.addEventListener('click', playMusic);
     }
   }
@@ -918,15 +906,12 @@ document.getElementById("cutBtn").onclick = function() {
 
 // --- Trigger the Final Photo Surprise Section ---
 document.getElementById("finalSurpriseBtn").onclick = function(event) {
-  // Stop this click from accidentally re-triggering the playMusic logic
   event.stopPropagation();
-
   document.getElementById("cake-container").style.display = "none";
   
   const photoSurpriseSection = document.getElementById("photo-surprise-section");
   photoSurpriseSection.style.display = "flex";
 
-  // 🎵 PAUSE AND RESET THE SONG 🎵
   const song = document.getElementById("birthdaySong");
   song.pause();
   song.currentTime = 0; 
