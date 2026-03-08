@@ -559,6 +559,8 @@ main {
 </head>
 <body>
 
+<audio id="birthdaySong" src="public/songs/pixel-adventure.mp3" preload="auto"></audio>
+
 <div class="container">
   <main>
     <h1 class="caption">Countdown For</h1>
@@ -812,6 +814,24 @@ const launchDate = new Date('March 12 2026 00:00:00').getTime();
 // Maximum days to calculate the visual border scale for the "Days" circle
 const MAX_DAYS = 365;
 
+// Flags to ensure code runs properly and doesn't repeat
+let timerEnded = false; 
+let songStarted = false;
+
+// 🎵 FUNCTION TO PLAY THE SONG 🎵
+function playMusic() {
+  if (timerEnded && !songStarted) {
+    const song = document.getElementById("birthdaySong");
+    song.play().then(() => {
+      songStarted = true;
+      // Once it plays successfully, remove the backup event listener
+      document.removeEventListener('click', playMusic);
+    }).catch(error => {
+      console.log("Waiting for user interaction to play the song...");
+    });
+  }
+}
+
 function countdown() {
   const now = new Date().getTime();
   if (now < launchDate) {
@@ -840,23 +860,34 @@ function countdown() {
     document.getElementById('seconds-box').style.setProperty('--deg', `${secondsDeg}deg`);
 
   } else {
-    // Reveal Birthday elements when countdown finishes
-    document.querySelector('.countdown').style.display = 'none';
-    
-    // Grabs ALL captions and hides them
-    const captions = document.querySelectorAll('.caption');
-    captions.forEach(caption => {
-      caption.style.display = 'none';
-    });
-    
-    const text = document.getElementById('birthdayText');
-    text.style.display = 'flex';
-    
-    setTimeout(() => { text.classList.add('show'); }, 200);
-    
-    setTimeout(() => {
-      document.getElementById('cutBtn').style.display = 'inline-block';
-    }, 6500); 
+    if (!timerEnded) {
+      timerEnded = true; 
+      
+      // Reveal Birthday elements when countdown finishes
+      document.querySelector('.countdown').style.display = 'none';
+      
+      // Grabs ALL captions and hides them
+      const captions = document.querySelectorAll('.caption');
+      captions.forEach(caption => {
+        caption.style.display = 'none';
+      });
+      
+      const text = document.getElementById('birthdayText');
+      text.style.display = 'flex';
+      
+      // 🎵 ATTEMPT TO PLAY SONG EXACTLY WHEN ANIMATION STARTS 🎵
+      setTimeout(() => { 
+        text.classList.add('show'); 
+        playMusic(); // Trigger song exactly when text drops down
+      }, 200);
+      
+      setTimeout(() => {
+        document.getElementById('cutBtn').style.display = 'inline-block';
+      }, 6500); 
+      
+      // 🎵 FALLBACK: IF BLOCKED, PLAY IT ON THE FIRST CLICK ANYWHERE 🎵
+      document.addEventListener('click', playMusic);
+    }
   }
 }
 
@@ -886,11 +917,19 @@ document.getElementById("cutBtn").onclick = function() {
 };
 
 // --- Trigger the Final Photo Surprise Section ---
-document.getElementById("finalSurpriseBtn").onclick = function() {
+document.getElementById("finalSurpriseBtn").onclick = function(event) {
+  // Stop this click from accidentally re-triggering the playMusic logic
+  event.stopPropagation();
+
   document.getElementById("cake-container").style.display = "none";
   
   const photoSurpriseSection = document.getElementById("photo-surprise-section");
   photoSurpriseSection.style.display = "flex";
+
+  // 🎵 PAUSE AND RESET THE SONG 🎵
+  const song = document.getElementById("birthdaySong");
+  song.pause();
+  song.currentTime = 0; 
 };
 </script>
 
