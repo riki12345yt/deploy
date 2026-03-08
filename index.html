@@ -8,7 +8,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Red+Hat+Text:wght@700&display=swap" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Lato:300italic" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css?family=Lobster" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Betania+Patmos+In&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Freckle+Face&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Freckle+Face&family=Pangolin&display=swap" rel="stylesheet">
 <style>
 /* ─────────────── Reset & Variables ─────────────── */
 * {
@@ -28,8 +31,9 @@
 }
 
 html {
-  font-family: 'Red Hat Text', sans-serif;
-  font-size: 14px;
+  color: var(--color-light-blue);
+  font-family:"Freckle Face", system-ui;
+  font-size: 16px;
   font-weight: 700;
 }
 
@@ -211,6 +215,7 @@ main {
   display: inline-flex;
   white-space: nowrap;
   flex-wrap: nowrap;
+  font-family:  "Betania Patmos In", cursive;
 }
 
 .birthday span {
@@ -237,14 +242,15 @@ main {
 
 /* Let's Cut the Cake Button */
 .cut-btn {
+  font-family:"Freckle Face", system-ui;
   margin-top: 30px;
-  padding: 12px 30px;
-  font-size: 1rem;
-  font-weight: 700;
+  padding: 10px 25px;
+  font-size: 1.1rem;
+  font-weight: 400;
   border: none;
-  border-radius: 8px;
+  border-radius: 16px;
   background: var(--color-red);
-  color: white;
+  color: rgb(28, 7, 133);
   cursor: pointer;
   display: none;
   transition: 0.3s;
@@ -367,7 +373,7 @@ main {
   opacity: 0;
   display: inline-block;
   transform: translateY(-200px);
-  font-family: 'Lobster', cursive;
+  font-family: "Dancing Script", cursive;
   font-size: 3.5rem;
   color: #fff;
   line-height: 1;
@@ -560,7 +566,7 @@ main {
 </head>
 <body>
 
-<audio id="birthdaySong" src="public/songs/pixel-adventure.mp3" preload="auto"></audio>
+<audio id="birthdaySong" src="public/song/pixel-adventure.mp3" preload="auto"></audio>
 
 <div class="container">
   <main>
