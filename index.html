@@ -24,7 +24,6 @@
   --color-dark-blue: #343650;
   --color-very-dark-blue: #1e1f29;
   --color-black: #191a24;
-  /* This variable will be automatically updated by JavaScript based on photo count */
   --scroll-distance: -1250px; 
 }
 
@@ -36,6 +35,13 @@ html {
 
 body {
   background-color: var(--color-very-dark-blue);
+  background-image: 
+    radial-gradient(circle at center, rgba(30, 31, 41, 0.2) 0%, rgba(30, 31, 41, 0.8) 100%),
+    url("public/images/b.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
   height: 100vh;
   width: 100%;
   display: flex;
@@ -64,60 +70,103 @@ main {
   justify-content: center;
   align-items: center;
   margin-bottom: 2rem;
-  background: url("../images/bg-stars.svg") center/contain repeat;
   padding: 10px;
 }
 
 .caption {
-  font-size: 1.5rem;
+  font-family:var(--color-white);
+  font-style: inherit;
+  font-size: 1.9rem;
   color: white;
   text-transform: uppercase;
-  margin-bottom: 2rem;
-  letter-spacing: 0.3em;
+  margin-bottom: 1rem;
+  letter-spacing: 0.2em;
+  word-spacing: 0.3em;
+  text-shadow: 2px 2px 5px rgba(0,0,0,0.5); 
 }
 
-/* ─────────────── Countdown Styles ─────────────── */
+/* ─────────────── Circular Countdown with Glowing Dot ─────────────── */
 .countdown {
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 20px;
   width: 100%;
-  flex-wrap: nowrap;
-  overflow-x: auto;
+  /* Forces all items into one row */
+  flex-wrap: nowrap; 
   padding: 10px 0;
 }
 
 .time-content {
   width: 80px;
-  height: 70px;
-  border-radius: 6px;
-  background-color: var(--color-very-dark-blue);
-  box-shadow: 0px 7px 2px -2px rgb(25,26,36);
+  height: 80px;
+  border-radius: 50%;
+  position: relative;
   display: flex;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+  --deg: 360deg; /* Dynamically updated by JS */
 }
 
+/* The Animated Glowing Circular Border */
+.time-content::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--color-red) 0deg, 
+    #bf2149 var(--deg), 
+    rgba(255, 16, 16, 0.1) var(--deg) 
+  );
+  box-shadow: 0px 7px 15px -2px rgba(0, 0, 0, 0.8);
+  z-index: 0;
+}
+
+/* The Traveling Glowing Dot */
+.dot-indicator {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  transform: rotate(var(--deg));
+  z-index: 2; 
+}
+
+.dot-indicator::before {
+  content: '';
+  position: absolute;
+  top: -3.5px; 
+  left: 50%;
+  transform: translateX(-50%);
+  width: 10px;
+  height: 10px;
+  background-color: var(--color-white);
+  border-radius: 50%;
+  box-shadow: 0 0 10px var(--color-white), 0 0 15px var(--color-red);
+}
+
+/* Inner Dark Circle */
 .time {
-  width: 100%;
-  height: 100%;
+  position: absolute;
+  inset: 3px; 
   background-color: var(--color-dark-blue);
   display: flex;
   justify-content: center;
   align-items: center;
-  font-size: 2.5rem;
+  font-size: 2.2rem;
   color: var(--color-red);
-  border-radius: 6px;
+  border-radius: 50%;
+  z-index: 1; 
 }
 
 .metric {
   text-align: center;
-  font-size: 0.65rem;
-  color: var(--color-light-blue);
-  margin-top: 5px;
+  font-size: 0.80rem;
+  color: var(--color-light-blue); 
+  margin-top: 12px;
   letter-spacing: 2px;
+  text-shadow: 1px 1px 3px rgba(11, 7, 7, 0.5);
 }
 
 /* ─────────────── Initial Birthday Text Drop ─────────────── */
@@ -135,6 +184,7 @@ main {
   text-align: center;
   max-width: 90%;
   gap: 0.2em;
+  text-shadow: 0px 4px 10px rgba(0,0,0,0.6);
 }
 
 .birthday .line {
@@ -358,7 +408,8 @@ main {
   display: none; 
   position: fixed;
   inset: 0;
-  background: var(--color-very-dark-blue);
+  background: rgba(30, 31, 41, 0.85); 
+  backdrop-filter: blur(2px); 
   z-index: 200;
   flex-direction: column;
   justify-content: center;
@@ -407,17 +458,16 @@ main {
 
 .slider-container::before {
   left: 0;
-  background: linear-gradient(to right, var(--color-very-dark-blue) 0%, rgba(30, 31, 41, 0) 100%);
+  background: linear-gradient(to right, rgba(30, 31, 41, 1) 0%, rgba(30, 31, 41, 0) 100%);
 }
 
 .slider-container::after {
   right: 0;
-  background: linear-gradient(to left, var(--color-very-dark-blue) 0%, rgba(30, 31, 41, 0) 100%);
+  background: linear-gradient(to left, rgba(30, 31, 41, 1) 0%, rgba(30, 31, 41, 0) 100%);
 }
 
 .slider-track {
   display: flex;
-  /* Width is now handled by JavaScript */
   animation: scrollImages 20s linear infinite;
 }
 
@@ -443,17 +493,18 @@ main {
   border: 3px solid var(--color-red);
 }
 
-/* Scroll distance is dynamically injected by JavaScript via a CSS Variable */
 @keyframes scrollImages {
   0% { transform: translateX(0); }
   100% { transform: translateX(var(--scroll-distance)); }
 }
 
-/* ─────────────── Mobile Media Queries ─────────────── */
+/* ─────────────── Mobile Media Queries (Fully Responsive) ─────────────── */
 @media (max-width: 768px) {
   .caption { font-size: 1.3rem; }
-  .time-content { width: 65px; height: 60px; }
-  .time { font-size: 2rem; }
+  .countdown { gap: 15px; }
+  .time-content { width: 65px; height: 65px; }
+  .time { font-size: 1.8rem; inset: 2.5px; }
+  .dot-indicator::before { width: 8px; height: 8px; top: -3px; }
   .birthday { font-size: 2rem; }
   .cake-text span.letter { font-size: 2.8rem; }
   .surprise-top-text { font-size: 2rem; }
@@ -461,13 +512,28 @@ main {
 }
 
 @media (max-width: 480px) {
-  .time-content { width: 55px; height: 50px; }
-  .time { font-size: 1.6rem; }
+  .caption { font-size: 1.1rem; margin-bottom: 1.5rem; }
+  /* Reduce gap to ensure all circles comfortably fit on one line */
+  .countdown { gap: 10px; }
+  .time-content { width: 55px; height: 55px; }
+  .time { font-size: 1.4rem; inset: 2px; }
+  /* Adjust dot to cleanly map to the thinner border on mobile */
+  .dot-indicator::before { width: 7px; height: 7px; top: -2.5px; }
+  .metric { font-size: 0.55rem; margin-top: 8px; }
   .birthday { font-size: 1.3rem; }
   .cake-text span.letter { font-size: 2.2rem; }
   
   .slider-container, .slide { height: 200px; }
   .slide { width: 200px; }
+}
+
+@media (max-width: 350px) {
+  /* Extra safeguard for very small screens (e.g. iPhone SE) */
+  .countdown { gap: 5px; }
+  .time-content { width: 48px; height: 48px; }
+  .time { font-size: 1.2rem; inset: 2px; }
+  .dot-indicator::before { width: 6px; height: 6px; top: -2px; }
+  .metric { font-size: 0.5rem; margin-top: 6px; }
 }
 
 @media (max-height: 650px) {
@@ -481,22 +547,35 @@ main {
 
 <div class="container">
   <main>
-    <h1 class="caption">Birthday Countdown</h1>
+    <h1 class="caption">Countdown For</h1>
+    <h1 class="caption">Your Birthday</h1>
     <section class="countdown">
       <div>
-        <div class="time-content"><div class="time"><span class="days">00</span></div></div>
+        <div class="time-content" id="days-box">
+          <div class="dot-indicator"></div>
+          <div class="time"><span class="days">00</span></div>
+        </div>
         <p class="metric">Days</p>
       </div>
       <div>
-        <div class="time-content"><div class="time"><span class="hours">00</span></div></div>
+        <div class="time-content" id="hours-box">
+          <div class="dot-indicator"></div>
+          <div class="time"><span class="hours">00</span></div>
+        </div>
         <p class="metric">Hours</p>
       </div>
       <div>
-        <div class="time-content"><div class="time"><span class="minutes">00</span></div></div>
+        <div class="time-content" id="minutes-box">
+          <div class="dot-indicator"></div>
+          <div class="time"><span class="minutes">00</span></div>
+        </div>
         <p class="metric">Minutes</p>
       </div>
       <div>
-        <div class="time-content"><div class="time"><span class="seconds">00</span></div></div>
+        <div class="time-content" id="seconds-box">
+          <div class="dot-indicator"></div>
+          <div class="time"><span class="seconds">00</span></div>
+        </div>
         <p class="metric">Seconds</p>
       </div>
     </section>
@@ -669,7 +748,6 @@ main {
 // ==========================================
 // 📸 JUST ADD YOUR PHOTO LINKS HERE! 📸
 // Paste your image URLs inside the quotes, separated by commas.
-// You can add as many or as few as you want!
 // ==========================================
 const photos = [
   "https://picsum.photos/seed/pic1/250/250",
@@ -696,30 +774,30 @@ function setupSlider() {
   track.innerHTML = html;
 
   // Calculate widths for the animation
-  // Desktop is 250px wide per slide, Mobile is 200px wide. 
   const isMobile = window.innerWidth <= 480;
   const slideWidth = isMobile ? 200 : 250;
   
-  // The track needs to be wide enough to hold ALL images (original + duplicates)
   track.style.width = `calc(${slideWidth}px * ${photos.length * 2})`;
   
-  // Set the CSS variable so the animation knows exactly how far to scroll
   const scrollDistance = slideWidth * photos.length;
   document.documentElement.style.setProperty('--scroll-distance', `-${scrollDistance}px`);
 }
 
-// Ensure the slider is set up immediately, and adapt if they resize the window
 setupSlider();
 window.addEventListener('resize', setupSlider);
 
 
-// --- Countdown Timer Logic ---
-const launchDate = new Date('March 12 2025 00:00:00').getTime();
+// --- Countdown Timer Logic with Border Calculation ---
+const launchDate = new Date('March 12 2026 00:00:00').getTime();
+
+// Maximum days to calculate the visual border scale for the "Days" circle
+const MAX_DAYS = 365;
 
 function countdown() {
   const now = new Date().getTime();
   if (now < launchDate) {
     const diff = (launchDate - now) / 1000;
+    
     const days = Math.floor(diff / 86400);
     const hours = Math.floor((diff % 86400) / 3600);
     const minutes = Math.floor((diff % 3600) / 60);
@@ -729,7 +807,21 @@ function countdown() {
     document.querySelector('.hours').textContent = hours;
     document.querySelector('.minutes').textContent = minutes;
     document.querySelector('.seconds').textContent = seconds;
+
+    // Calculate how many degrees (out of 360) each border should rotate/glow
+    const daysDeg = (days / MAX_DAYS) * 360;
+    const hoursDeg = (hours / 24) * 360;
+    const minutesDeg = (minutes / 60) * 360;
+    const secondsDeg = (seconds / 60) * 360;
+
+    // Apply the degrees to the custom CSS variable for each specific circle container
+    document.getElementById('days-box').style.setProperty('--deg', `${daysDeg}deg`);
+    document.getElementById('hours-box').style.setProperty('--deg', `${hoursDeg}deg`);
+    document.getElementById('minutes-box').style.setProperty('--deg', `${minutesDeg}deg`);
+    document.getElementById('seconds-box').style.setProperty('--deg', `${secondsDeg}deg`);
+
   } else {
+    // Reveal Birthday elements when countdown finishes
     document.querySelector('.countdown').style.display = 'none';
     document.querySelector('.caption').style.display = 'none';
     const text = document.getElementById('birthdayText');
@@ -749,25 +841,20 @@ countdown();
 
 // --- Cake and Final Surprise Logic ---
 document.getElementById("cutBtn").onclick = function() {
-  // 1. Hide the initial birthday message
   document.getElementById("birthdayText").style.display = "none";
   
-  // 2. Show the cake container
   const cakeContainer = document.getElementById("cake-container");
   cakeContainer.style.display = "flex";
   
-  // 3. Force reset the SVG timeline
   const cakeSvg = document.getElementById("cake");
   if (cakeSvg && cakeSvg.setCurrentTime) {
       cakeSvg.setCurrentTime(0);
   }
 
-  // 4. Trigger the dropping cake text after the cake finishes building (~4.5s)
   setTimeout(() => {
     document.getElementById("finalCakeText").classList.add("show-cake-text");
   }, 4500);
 
-  // 5. Show the Final Surprise button after all letters drop (~9.5s total time)
   setTimeout(() => {
     document.getElementById("finalSurpriseBtn").classList.add("show-btn");
   }, 9500);
@@ -775,10 +862,8 @@ document.getElementById("cutBtn").onclick = function() {
 
 // --- Trigger the Final Photo Surprise Section ---
 document.getElementById("finalSurpriseBtn").onclick = function() {
-  // Hide the entire cake container screen
   document.getElementById("cake-container").style.display = "none";
   
-  // Display the final photo scrolling section
   const photoSurpriseSection = document.getElementById("photo-surprise-section");
   photoSurpriseSection.style.display = "flex";
 };
